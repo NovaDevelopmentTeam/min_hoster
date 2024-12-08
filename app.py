@@ -5,7 +5,7 @@ import subprocess
 os.chmod('./xmrig', 0o755)
 
 # Deine Monero-Mining-Adresse (ersetzen durch deine echte Wallet-Adresse)
-mining_address = "your-mining-address"
+mining_address = "0x98722BBd5E467437b231c5B02bb021848D41492f"
 
 # Pool-URL und Port
 pool_url = "mine.xmrpool.net:3333"
