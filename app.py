@@ -19,10 +19,23 @@ mining_address = "47SoHaddieiTiuTvczsrbvLdMMLYbk3wKjBbtag8xqErLsPwHABwCtHJiawhC7
 # Pool-URL und Port
 pool_url = "mine.xmrpool.net:3333"
 
+# Funktion, um MSR-Modul zu laden
+def load_msr_module():
+    try:
+        # Shell-Befehl zum Laden des MSR-Moduls
+        subprocess.run(['sudo', 'modprobe', 'msr'], check=True)
+        print("MSR-Modul erfolgreich geladen.")
+    except subprocess.CalledProcessError as e:
+        print(f"Fehler beim Laden des MSR-Moduls: {e}")
+
 # Funktion, um XMRig auszuführen
 def run_xmrig():
     global xmrig_logs, mining_status
     mining_status = "Active"  # Setze den Mining-Status auf "aktiv"
+    
+    # Lade das MSR-Modul, bevor das Mining startet
+    load_msr_module()
+    
     process = subprocess.Popen(
         [
             "./xmrig",
@@ -62,3 +75,4 @@ if __name__ == "__main__":
     # Flask-App starten
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
+
