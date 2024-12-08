@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monero Mining Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .status {
+            font-size: 24px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+        }
+        .active {
+            color: green;
+        }
+        .inactive {
+            color: red;
+        }
+        .logs {
+            margin-top: 30px;
+            white-space: pre-wrap;
+            text-align: left;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Monero Mining Status</h1>
+    
+    <div class="status">
+        <p>Mining Status: 
+        <span class="{{ 'active' if mining_status == 'Active' else 'inactive' }}">{{ mining_status }}</span></p>
+    </div>
+    
+    <div class="logs">
+        <h2>Logs</h2>
+        <a href="/logs" target="_blank">View detailed logs</a>
+    </div>
+</body>
+</html>
