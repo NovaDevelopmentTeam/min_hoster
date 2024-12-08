@@ -1,6 +1,10 @@
+import os
 import subprocess
 
-# Run the binary and capture the output
+# Setze Ausführungsrechte
+os.chmod('./xmrig', 0o755)
+
+# Führe die Datei aus
 result = subprocess.run(["./xmrig", "--some-arg"], capture_output=True, text=True)
-print("Output:", result.stdout)
-print("Errors:", result.stderr)
+print(result.stdout)
+print(result.stderr)
