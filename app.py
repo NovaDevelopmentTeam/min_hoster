@@ -14,7 +14,7 @@ mining_status = "Inactive"  # Status des Minings (default: Inaktiv)
 os.chmod('./xmrig', 0o755)
 
 # Deine Monero-Mining-Adresse (ersetzen durch deine echte Wallet-Adresse)
-mining_address = "0x98722BBd5E467437b231c5B02bb021848D41492f"
+mining_address = "47SoHaddieiTiuTvczsrbvLdMMLYbk3wKjBbtag8xqErLsPwHABwCtHJiawhC7sS97WJd52KrL1cxTENHS4foTu98rHm1Gs"
 
 # Pool-URL und Port
 pool_url = "mine.xmrpool.net:3333"
