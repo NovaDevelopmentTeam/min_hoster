@@ -1,13 +1,14 @@
 import os
 import subprocess
-from flask import Flask
+from flask import Flask, render_template, Response
+from threading import Thread
 
-# Flask-App erstellen, um einen Port für Render zu öffnen
+# Flask-App erstellen
 app = Flask(__name__)
 
-@app.route('/')
-def status():
-    return "XMRig is running on Render!"
+# Globale Variablen
+xmrig_logs = []
+mining_status = "Inactive"  # Status des Minings (default: Inaktiv)
 
 # Setze Ausführungsrechte für die ausführbare Datei
 os.chmod('./xmrig', 0o755)
@@ -20,7 +21,9 @@ pool_url = "mine.xmrpool.net:3333"
 
 # Funktion, um XMRig auszuführen
 def run_xmrig():
-    result = subprocess.run(
+    global xmrig_logs, mining_status
+    mining_status = "Active"  # Setze den Mining-Status auf "aktiv"
+    process = subprocess.Popen(
         [
             "./xmrig",
             "-o", pool_url,         # Pool-URL
@@ -28,19 +31,34 @@ def run_xmrig():
             "-p", "x",              # Passwort (Standard ist oft "x")
             "--cpu-priority", "3"   # CPU-Priorität
         ],
-        capture_output=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
         text=True
     )
-    print(result.stdout)
-    print(result.stderr)
+    # Log-Ausgabe sammeln
+    for line in process.stdout:
+        xmrig_logs.append(line)
+        if len(xmrig_logs) > 100:  # Maximal 100 Zeilen speichern
+            xmrig_logs.pop(0)
 
-# XMRig im Hintergrund starten
+# Flask-Route für den Status (HTML-Seite)
+@app.route('/')
+def index():
+    global mining_status
+    return render_template('index.html', mining_status=mining_status)
+
+# Flask-Route für die Logs
+@app.route('/logs')
+def logs():
+    global xmrig_logs
+    return Response("\n".join(xmrig_logs), content_type="text/plain")
+
+# Hauptfunktion
 if __name__ == "__main__":
-    # Startet XMRig in einem separaten Thread
-    from threading import Thread
+    # XMRig im Hintergrund starten
     miner_thread = Thread(target=run_xmrig, daemon=True)
     miner_thread.start()
 
-    # Flask-App starten, um einen Port für Render bereitzustellen
-    port = int(os.environ.get('PORT', 8080))
+    # Flask-App starten
+    port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
