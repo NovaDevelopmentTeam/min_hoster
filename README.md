@@ -1,1 +1,1 @@
-This repository is more mining
+This repository is for mining
